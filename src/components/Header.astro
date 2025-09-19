@@ -1,0 +1,29 @@
+---
+import { Button } from "@/components/ui/button";
+import { IconBrandGithubFilled } from "@tabler/icons-react";
+---
+
+<header class="border-b border-border/50 backdrop-blur-sm sticky top-0 z-50">
+  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div
+        class="w-8 h-8 bg-accent rounded-lg flex items-center justify-center"
+      >
+        <span class="text-accent-foreground font-bold text-sm">AB</span>
+      </div>
+      <span class="font-semibold text-xl">Agent Boost</span>
+    </div>
+
+    <Button className="gap-2">
+      <a
+        href="https://github.com/agentboost/agentboost"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="gap-2 flex items-center"
+      >
+        <IconBrandGithubFilled className="w-5 h-5" />
+        <span>View on GitHub</span>
+      </a>
+    </Button>
+  </div>
+</header>
