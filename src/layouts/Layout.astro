@@ -1,5 +1,10 @@
 ---
 import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
 ---
 
 <html lang="en">
@@ -8,7 +13,12 @@ import "../styles/global.css";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>AgentBoost - AI-Powered Project Intelligence</title>
+    <title>{Astro.props.title}</title>
+    {
+      Astro.props.description ?? (
+        <meta name="description" content={Astro.props.description} />
+      )
+    }
   </head>
   <body class="font-sans bg-background grid-pattern flex flex-col min-h-screen">
     <slot />
