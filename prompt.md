@@ -23,4 +23,4 @@ Guidelines
 - Document only discoverable patterns, not aspirational practices
 - Reference key files/directories that exemplify important patterns
 
-use the writeFile tool to write the `AGENTS.md` file for the user.
+use the write tool to write the `AGENTS.md` file for the user if empt.

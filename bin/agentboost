@@ -3,6 +3,8 @@ import { AgentBoost } from '../dist/index.js';
 
 const agentboost = new AgentBoost(process.cwd());
 
+await agentboost.register('../dist/plugins');
+
 agentboost.run(process.argv.slice(2)).catch((err) => {
   console.error(err);
   process.exit(1);
