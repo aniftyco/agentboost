@@ -7,7 +7,7 @@
     "agentboost": "bin/agentboost"
   },
   "scripts": {
-    "start": "bunx --bun tsc --watch",
+    "start": "tsc --watch",
     "build": "tsc",
     "prepublishOnly": "rm -rf dist/ && tsc"
   },
