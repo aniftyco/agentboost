@@ -1,12 +1,9 @@
-import { openai } from '@ai-sdk/openai';
-import { stepCountIs, streamText, tool } from 'ai';
-import { readdirSync } from 'fs';
-import { readFile, writeFile } from 'fs/promises';
+import { readdirSync, write } from 'fs';
+import { writeFile } from 'fs/promises';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { z } from 'zod';
 import { Plugin, PluginLifecycle } from './plugin.js';
-import { parseArgs, buildPathTree } from './utils.js';
+import { parseArgs } from './utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -36,7 +33,7 @@ export class AgentBoost {
     }
   }
 
-  async emit(event: LifeCycleEvent): Promise<void> {
+  async emit(event: LifeCycleEvent): Promise<void | string> {
     switch (event) {
       case 'detect': {
         for (const plugin of this.plugins.values()) {
@@ -55,7 +52,7 @@ export class AgentBoost {
             compiled.push(await plugin.compile());
           }
         }
-        break;
+        return compiled.join('\n');
       }
       default: {
         throw new Error(`Unknown event: ${event}`);
@@ -63,66 +60,22 @@ export class AgentBoost {
     }
   }
 
-  async getPrompt(): Promise<string> {
-    return readFile(join(__dirname, '../prompt.md'), 'utf-8');
-  }
-
   async run(argv: string[]): Promise<void> {
     const { command = 'init', params } = parseArgs(argv);
 
+    console.log('🔍 Detecting project structure...');
     await this.emit('detect');
-
-    console.log('Detected plugins:', Array.from(this.detected).join(', ') || 'None');
-
-    // const { textStream } = streamText({
-    //   model: openai('gpt-4o'),
-    //   prompt: await this.getPrompt(),
-    //   stopWhen: stepCountIs(10),
-    //   tools: {
-    //     codebase: tool({
-    //       description: 'Get the source code tree starting from the current working directory',
-    //       inputSchema: z.object({
-    //         path: z.string().optional().describe('The directory path relative to the project root'),
-    //       }),
-    //       outputSchema: z.string().describe('A JSON representation of the source code tree'),
-    //       execute: (async ({ path }) => {
-    //         const tree = await buildPathTree(path ? join(path, this.cwd) : this.cwd);
-    //         return JSON.stringify(tree, null, 2);
-    //       }).bind(this),
-    //     }),
-    //     read: tool({
-    //       description: 'Read a file',
-    //       inputSchema: z.object({
-    //         path: z.string().describe('The file path relative to the project root'),
-    //       }),
-    //       outputSchema: z.string().describe('The UTF-8 text content of the file'),
-    //       execute: (async ({ path }) => {
-    //         try {
-    //           return await readFile(`${this.cwd}/${path}`, 'utf-8');
-    //         } catch (e) {
-    //           return '';
-    //         }
-    //       }).bind(this),
-    //     }),
-    //     write: tool({
-    //       description: 'Write a file',
-    //       outputSchema: z.string().describe('A success message'),
-    //       inputSchema: z.object({
-    //         path: z.string().describe('The file path relative to the project root'),
-    //         content: z.string().describe('The full content to write to the file'),
-    //       }),
-    //       execute: (async ({ path, content }) => {
-    //         const fullPath = `${this.cwd}/${path}`;
-    //         await writeFile(fullPath, content, 'utf-8');
-    //         return `${path} updated successfully.`;
-    //       }).bind(this),
-    //     }),
-    //   },
-    // });
-
-    // for await (const chunk of textStream) {
-    //   process.stdout.write(chunk);
-    // }
-    // process.stdout.write('\n');
+    switch (command) {
+      case 'init': {
+        const agentsFile = await this.emit('compile');
+        writeFile(join(this.cwd, 'AGENTS.md'), agentsFile || '', 'utf-8');
+        console.log('📝 Generated AGENTS.md successfully!');
+        break;
+      }
+      default: {
+        console.error(`Unknown command: ${command}`);
+        process.exit(1);
+      }
+    }
   }
 }

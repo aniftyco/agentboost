@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 import { AgentBoost } from '../dist/index.js';
+import plugins from '../dist/plugins/index.js';
 
 const agentboost = new AgentBoost(process.cwd());
 
-await agentboost.register('../dist/plugins');
+await Promise.all(plugins.map((Plugin) => agentboost.register(Plugin)));
 
 agentboost.run(process.argv.slice(2)).catch((err) => {
   console.error(err);

@@ -1,3 +1,5 @@
+import { Context } from './tool.js';
+
 export interface PluginLifecycle {
   name: string;
   detect(): Promise<boolean>;
@@ -7,6 +9,6 @@ export interface PluginLifecycle {
 export abstract class Plugin {
   constructor(
     public readonly name: string,
-    public readonly insights: Record<string, any>
+    public readonly insights: Context['insights']
   ) {}
 }
