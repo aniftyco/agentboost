@@ -11,8 +11,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default class BigPicturePlugin extends Plugin implements PluginLifecycle {
-  constructor(insights: Context['insights']) {
-    super('BigPicturePlugin', insights);
+  constructor(context: Context) {
+    super('BigPicturePlugin', context);
   }
   async detect(): Promise<boolean> {
     console.log('✅ Found "Big Picture" architectural decisions.');
@@ -24,7 +24,7 @@ export default class BigPicturePlugin extends Plugin implements PluginLifecycle 
       model: openai('gpt-4o'),
       prompt: await readFile(join(__dirname, '../../prompt.md'), 'utf-8'),
       stopWhen: stepCountIs(10),
-      tools: tools(this),
+      tools: tools(this.context),
     });
 
     return (await response.text).trim();
