@@ -1,7 +1,6 @@
 import { glob } from 'glob';
 import ignore from 'ignore';
-import { readdir, readFile } from 'node:fs/promises';
-import { join, sep } from 'node:path';
+import { readFile } from 'node:fs/promises';
 
 /**
  * Determine whether a token is flag-like (starts with a dash).

@@ -1,7 +1,6 @@
-import { readdirSync, write } from 'fs';
-import { writeFile } from 'fs/promises';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { writeFile, readdir } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { Plugin, PluginLifecycle } from './plugin.js';
 import { parseArgs } from './utils.js';
 
@@ -22,7 +21,7 @@ export class AgentBoost {
     if (typeof arg === 'string') {
       const dir = join(__dirname, arg);
       const plugins = await Promise.all(
-        readdirSync(dir).map((file) => import(join(dir, file)).then((mod) => mod.default))
+        (await readdir(dir)).map((file) => import(join(dir, file)).then((mod) => mod.default))
       );
       for (const plugin of plugins) {
         this.register(plugin);

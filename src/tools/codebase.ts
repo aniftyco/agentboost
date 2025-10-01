@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { join } from 'node:path';
 import { z } from 'zod';
 import tool from '../tool.js';
 import { buildPathTree } from '../utils.js';

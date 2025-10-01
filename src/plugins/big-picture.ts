@@ -1,8 +1,8 @@
 import { openai } from '@ai-sdk/openai';
 import { stepCountIs, streamText } from 'ai';
-import { readFile } from 'fs/promises';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { readFile } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { Plugin, PluginLifecycle } from '../plugin.js';
 import { Context } from '../tool.js';
 import tools from '../tools/index.js';
