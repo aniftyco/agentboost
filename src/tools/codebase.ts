@@ -11,7 +11,7 @@ export default tool({
   outputSchema: z.string().describe('A JSON representation of the source code tree'),
   async execute({ path }) {
     console.log('🔍 Building codebase tree...');
-    const tree = await buildPathTree(path ? join(path, this.insights.cwd) : this.insights.cwd);
+    const tree = await buildPathTree(path ? join(path, this.context.cwd) : this.context.cwd);
     return JSON.stringify(tree, null, 2);
   },
 });

@@ -10,7 +10,7 @@ export default tool({
     content: z.string().describe('The full content to write to the file'),
   }),
   async execute({ path, content }) {
-    const fullPath = `${this.insights.cwd}/${path}`;
+    const fullPath = `${this.context.cwd}/${path}`;
     try {
       await writeFile(fullPath, content, 'utf-8');
       return `${path} updated successfully.`;

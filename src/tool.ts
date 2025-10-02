@@ -1,6 +1,6 @@
 import { InferToolInput, Tool, tool } from 'ai';
 
-export type Context = { insights: Record<string, any> };
+export type Context = Record<string, any>;
 
 export default (schema: Tool) => (ctx: Context) =>
   tool({

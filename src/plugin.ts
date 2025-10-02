@@ -9,6 +9,6 @@ export interface PluginLifecycle {
 export abstract class Plugin {
   constructor(
     public readonly name: string,
-    public readonly insights: Context['insights']
+    public readonly context: Context
   ) {}
 }

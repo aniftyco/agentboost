@@ -11,7 +11,7 @@ export default tool({
   async execute({ path }) {
     console.log(`📄 Reading file: ${path}`);
     try {
-      return await readFile(`${this.insights.cwd}/${path}`, 'utf-8');
+      return await readFile(`${this.context.cwd}/${path}`, 'utf-8');
     } catch (e) {
       return '';
     }
